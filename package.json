@@ -1,0 +1,58 @@
+{
+  "name": "json-complete-benchmarking",
+  "version": "1.0.0",
+  "description": "Code for comparing the speed and features of json-complete against other libraries and techniques.",
+  "main": "index.js",
+  "dependencies": {
+    "@msgpack/msgpack": "^1.8.0",
+    "@ungap/global-this": "^0.3.1",
+    "altjson": "^1.0.0",
+    "bson": "^4.0.2",
+    "cryo": "0.0.6",
+    "fast-json-stable-stringify": "^2.0.0",
+    "fast-safe-stringify": "^2.0.6",
+    "flatted": "^2.0.1",
+    "gson": "^0.1.5",
+    "hydrate": "^1.0.0",
+    "ison": "^0.0.20",
+    "json-complete": "^2.0.0",
+    "json-cycle": "^1.3.0",
+    "json-helpers": "^2.1.0",
+    "json-literal": "^1.1.0",
+    "json-stable-stringify": "^1.0.1",
+    "json-stringify-date": "^0.1.8",
+    "json-stringify-safe": "^5.0.1",
+    "json3": "^3.3.3",
+    "json5": "^2.1.0",
+    "json7": "^0.2.0",
+    "jsonify": "0.0.0",
+    "kson": "^0.0.3",
+    "pson": "^2.0.0",
+    "qjson": "^0.0.2",
+    "resurrect-js": "^1.0.1",
+    "rrjson": "^1.0.1",
+    "rson": "^1.6.3",
+    "serialize-javascript": "^1.7.0",
+    "serialize-to-js": "^3.0.0",
+    "snapshot": "0.0.0",
+    "telejson": "^2.2.2",
+    "xson": "0.0.6",
+    "zson": "^0.1.3"
+  },
+  "devDependencies": {
+    "benchmark": "^2.1.4"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dwighthouse/json-complete-benchmarking.git"
+  },
+  "author": "Dwight House",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/dwighthouse/json-complete-benchmarking/issues"
+  },
+  "homepage": "https://github.com/dwighthouse/json-complete-benchmarking#readme"
+}
