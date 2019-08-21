@@ -1,6 +1,6 @@
 const NativeJsonProtector = require('../utils/NativeJsonProtector.js');
 NativeJsonProtector.restore();
-const lib = require('pson');
+const lib = require('../node_modules/pson/dist/PSON.min.js');
 NativeJsonProtector.kill();
 
 const instance = new lib.ProgressivePair();

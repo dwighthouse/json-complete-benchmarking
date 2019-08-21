@@ -14,7 +14,7 @@ module.exports = {
         globalThis.JSON = void 0;
     },
     restore: () => {
-        globalThis.JSON = REAL_JSON;
+        globalThis.JSON = globalThis.REAL_JSON;
     },
     get: () => {
         return globalThis.REAL_JSON;

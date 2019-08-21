@@ -20,25 +20,24 @@ const prepOps = (op) => {
         op[dataType].items.sort(sortByLib);
 
         for (let i = 0; i < op[dataType].items.length; i += 1) {
-            if (op[dataType].items[i].hz) {
-                op[dataType].min = Math.min(op[dataType].min, op[dataType].items[i].hz);
-                op[dataType].max = Math.max(op[dataType].max, op[dataType].items[i].hz);
+            if (op[dataType].items[i].result.hz) {
+                op[dataType].max = Math.max(op[dataType].max, op[dataType].items[i].result.hz);
             }
         }
     });
 };
 
-const generateBar = (lib, value, max, index) => {
-    const relativeValue = (value / max) * 845;
-
+const generateBar = (lib, result, max, index) => {
     const libWeight = lib === 'JSON (native)' || lib === 'json-complete' ? 'bold' : 'normal';
 
-    if (Object.is(relativeValue, NaN)) {
+    if (typeof result === 'string') {
         return `<g transform="translate(150 ${(20 * (index + 1)) + 5})">
     <text x="-5" y="9" font-size="10" alignment-baseline="middle" text-anchor="end" font-weight="${libWeight}">${lib}</text>
-    <text x="0" y="9" font-size="10" fill="#f00" alignment-baseline="middle" text-anchor="start">FAILED</text>
+    <text x="0" y="9" font-size="10" fill="#f00" alignment-baseline="middle" text-anchor="start">${result}</text>
 </g>`;
     }
+
+    const relativeValue = (result.hz / max) * 845;
 
     let opsTextAnchor = 'end';
     let opsTextX = relativeValue - 5;
@@ -52,7 +51,7 @@ const generateBar = (lib, value, max, index) => {
     return `<g transform="translate(150 ${(20 * (index + 1)) + 5})">
     <text x="-5" y="9" font-size="10" alignment-baseline="middle" text-anchor="end" font-weight="${libWeight}">${lib}</text>
     <rect x="0" y="0" width="${relativeValue}" height="16" fill="#000"></rect>
-    <text x="${opsTextX}" y="9" font-size="10" fill="${opsTextColor}" alignment-baseline="middle" text-anchor="${opsTextAnchor}">${new Intl.NumberFormat().format(value)}</text>
+    <text x="${opsTextX}" y="9" font-size="10" fill="${opsTextColor}" alignment-baseline="middle" text-anchor="${opsTextAnchor}">${new Intl.NumberFormat().format(result.hz)}</text>
 </g>`;
 };
 
@@ -67,7 +66,7 @@ const generateSvg = (op, dataName) => {
 <text font-size="16" x="50%" y="14" dominant-baseline="middle" text-anchor="middle">${dataName} - ${opName} (ops/sec)</text>
 
 ${op[dataName].items.map((item, index) => {
-    return generateBar(item.lib, item.hz, max, index);
+    return generateBar(item.lib, item.result, max, index);
 }).join('\n\n')}
 
 <text font-size="12" x="50%" y="${maxHeight - 12}" dominant-baseline="middle" text-anchor="middle">Larger is better</text>
@@ -118,14 +117,13 @@ const generateAndWriteSvgs = async (op) => {
         if (!op[result.data]) {
             op[result.data] = {
                 items: [],
-                min: Infinity,
                 max: 0,
             };
         }
 
         op[result.data].items.push({
             lib: result.lib,
-            ...result.result,
+            result: result.result,
         });
     });
 
