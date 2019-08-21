@@ -1,13 +1,14 @@
 const NativeJsonProtector = require('../utils/NativeJsonProtector.js');
 NativeJsonProtector.restore();
 const Benchmark = require('benchmark');
+const shuffle = require('../utils/shuffle.js');
 NativeJsonProtector.kill();
 
-const adapters = [
+const adapters = shuffle([
     require('../adapters/jsonNATIVE.js'),
     require('../adapters/altjson.js'),
     require('../adapters/bson.js'),
-    require('../adapters/cryo.js'),
+    // require('../adapters/cryo.js'), // Temp disabled due to security vulnerabilities
     require('../adapters/fast-json-stable-stringify.js'),
     require('../adapters/fast-safe-stringify.js'),
     require('../adapters/flatted.js'),
@@ -39,7 +40,7 @@ const adapters = [
     require('../adapters/telejson.js'),
     require('../adapters/xson.js'),
     require('../adapters/zson.js'),
-];
+]);
 
 const dataItems = {
     singleValue: require('../data/singleValue.js'),
@@ -120,35 +121,34 @@ const createBenchmarksForAdapter = (benchmarks, adapter, dataItems) => {
 };
 
 (async () => {
-    const results = {};
+    const results = [];
 
     for (let a = 0; a < adapters.length; a += 1) {
         const adapter = adapters[a];
         const benchmarkNormalSuite = new Benchmark.Suite;
 
         benchmarkNormalSuite.on('cycle', function (event) {
-            if (!results[adapter.name]) {
-                results[adapter.name] = {
-                    encode: {},
-                    decode: {},
-                };
-            }
-
             const names = event.target.name.split(' - ');
 
-            const resultOp = results[adapter.name][names[2]];
-
+            let result = '';
             if (event.target.aborted) {
-                resultOp[names[1]] = 'fail';
+                result = 'fail';
             }
             else {
                 const hz = event.target.hz;
 
-                resultOp[[names[1]]] = {
-                    hz: hz.toFixed(hz < 100 ? 2 : 0),
+                result = {
+                    hz: Number(hz.toFixed(hz < 100 ? 2 : 0)),
                     rme: event.target.stats.rme.toFixed(2),
                 };
             }
+
+            results.push({
+                lib: adapter.name,
+                op: names[2],
+                data: names[1],
+                result: result,
+            });
 
             console.log(String(event.target));
         });
@@ -157,8 +157,6 @@ const createBenchmarksForAdapter = (benchmarks, adapter, dataItems) => {
             NativeJsonProtector.restore();
         }
 
-        createBenchmarksForAdapter(benchmarkNormalSuite, adapter, dataItems);
-
         benchmarkNormalSuite.on('complete', () => {
             if (adapter.restoreGlobalJson) {
                 NativeJsonProtector.kill();
@@ -166,6 +164,8 @@ const createBenchmarksForAdapter = (benchmarks, adapter, dataItems) => {
 
             resolver(); // End the waiting
         });
+
+        createBenchmarksForAdapter(benchmarkNormalSuite, adapter, dataItems);
 
         benchmarkNormalSuite.run({ 'async': true });
 
