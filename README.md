@@ -2,7 +2,7 @@
 
 Tools for comparing functionality and performance of many different json alternative libraries.
 
-Please view the results in the [primary repository]().
+Please view the results in the [primary repository](https://github.com/cierelabs/json-complete).
 
 ## Install
 
