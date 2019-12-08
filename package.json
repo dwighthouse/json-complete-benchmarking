@@ -45,7 +45,7 @@
     "resurrect-js": "^1.0.1",
     "rrjson": "^1.0.1",
     "rson": "^1.6.3",
-    "serialize-javascript": "^1.7.0",
+    "serialize-javascript": "^2.1.1",
     "serialize-to-js": "^3.0.0",
     "snapshot": "0.0.0",
     "telejson": "^2.2.2",
