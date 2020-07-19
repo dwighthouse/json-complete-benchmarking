@@ -1,6 +1,6 @@
 const NativeJsonProtector = require('../utils/NativeJsonProtector.js');
 NativeJsonProtector.restore();
-const lib = require('flatted/cjs');
+const lib = require('flatted');
 NativeJsonProtector.kill();
 
 module.exports = {
